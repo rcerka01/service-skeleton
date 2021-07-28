@@ -1,0 +1,6 @@
+{
+    "name" : "<%= serviceName %>",
+    "packaging" : {
+        "type" : "spec"
+    }
+}
