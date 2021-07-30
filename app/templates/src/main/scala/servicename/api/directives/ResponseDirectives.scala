@@ -1,6 +1,6 @@
 package <%= packageName %>.api.directives
 
-import <%= packageName %>.api.directives.ResponseDirectives.MultiEntityResponseData
+import <%= packageName %>.api.directives.ResponseDirectives.{MultiEntityResponseData, SingleEntityResponseData}
 import <%= packageName %>.api.params.Paginate
 import <%= packageName %>.domain.response.Response
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -22,30 +22,22 @@ trait ResponseDirectives {
   }
 
   def toResponse[T]()
-                   (resultsFuture: Future[Option[T]]): Future[Response[T]] = {
+                   (resultsFuture: Future[SingleEntityResponseData[T]]): Future[Response[T]] = {
 
-    resultsFuture.map { results =>
+    resultsFuture.map { result =>
       Response(
-        total = 1,
+        total = result.total,
         limit = 1,
         offset = 0,
-        results = results.toSeq
+        results = result.entity.toSeq
       )
     }
   }
 
-  def toResponse[T](singleResult: T): Response[T] = {
-
-    Response(
-      total = 1,
-      limit = 1,
-      offset = 0,
-      results = Seq(singleResult)
-    )
-  }
 }
 
 object ResponseDirectives {
+  case class SingleEntityResponseData[T](entity: Option[T], total: Int)
   case class MultiEntityResponseData[T](entities: Seq[T], total: Int)
 }
 

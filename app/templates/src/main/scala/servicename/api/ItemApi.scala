@@ -35,7 +35,7 @@ trait ItemApi extends JsonSerializers
         respondWithCacheHeaders {
           complete {
             log.info(s"/items/$id")
-            toResponse {
+            toResponse() {
               itemDataSource.getSingleItem(id)
             }
           }

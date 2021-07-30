@@ -1,6 +1,7 @@
 package <%= packageName %>.datasource
 
 import <%= packageName %>.domain.Item
+import <%= packageName %>.api.directives.ResponseDirectives.SingleEntityResponseData
 import org.specs2.mutable.Specification
 import util.FutureSupport
 
@@ -12,7 +13,7 @@ class RandomItemDataSourceSpec extends Specification
       val randomItemDataSource = new RandomItemDataSource
 
       whenReady(randomItemDataSource.getSingleItem(1)) { item =>
-        item must beSome[Item]
+        item must haveClass[SingleEntityResponseData[Item]]
       }
     }
   }
