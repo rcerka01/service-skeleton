@@ -30,7 +30,14 @@ Yeoman will then ask you a number of questions about what you want from the serv
 ## What's included
 
 - [Akka HTTP](http://doc.akka.io/docs/akka-http/current/scala/http/index.html) webserver
-- Unit and Integration tests using the [Specs2](https://etorreborre.github.io/specs2/guide/SPECS2-3.8.5/org.specs2.guide.QuickStart.html) framework
+- Unit and Integration tests using the ScalaTest
 - [Scalastyle](http://www.scalastyle.org/) SBT plugin for checking code style
 - [Scoverage](http://scoverage.org/) SBT plugin for checking code coverage of the tests
-- [rms-speculate](https://github.com/bbc/rms-speculate/) SBT plugin for creating service scripts and building the RPM on Centos 7
+
+## Backlog
+
+Down-tag warnings or use Node version < 12.0.0
+
+```
+sudo n 12.0.0
+```

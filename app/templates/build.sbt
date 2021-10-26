@@ -47,8 +47,8 @@ val applicationDependencies = {
 }
 
 dependencyCheckFormats := Seq("HTML", "XML")
-dependencyCheckCveUrlModified := Some(new URL("http://vulnerability-mirror.rms.api.bbci.co.uk/data/nvdcve-1.0-modified.json.gz"))
-dependencyCheckCveUrlBase := Some("http://vulnerability-mirror.rms.api.bbci.co.uk/data/nvdcve-1.0-%d.json.gz")
+dependencyCheckCveUrlModified := None
+dependencyCheckCveUrlBase := None
 dependencyCheckFailBuildOnCVSS := 5
 dependencyCheckSuppressionFiles += new File("dependency-suppressions.xml")
 
