@@ -7,8 +7,7 @@ object IntegrationTests {
 
   lazy val settings = Defaults.itSettings ++ Seq(
     javaOptions in ItTest ++= Seq(
-      "-Dconfig.file=src/main/resources/application.it.conf",
-      "-Dlogback.configurationFile=logback.it.xml"),
+      "-Dconfig.file=src/main/resources/application.it.conf"),
     fork in ItTest := true
   )
 }

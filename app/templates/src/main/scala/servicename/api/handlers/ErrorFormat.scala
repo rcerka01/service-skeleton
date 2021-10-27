@@ -1,13 +1,15 @@
-package <%= packageName %>.api.directives
+package <%= packageName %>.api.handlers
 
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.StatusCode
 import akka.http.scaladsl.server.Directives.complete
 import akka.http.scaladsl.server.StandardRoute
-import <%= packageName %>.api.directives.ErrorResponseDirectives.ErrorResponseData
 import <%= packageName %>.domain.marshalling.JsonSerializers
-import <%= packageName %>.domain.response.ErrorResponse
+import <%= packageName %>.domain.responses.ErrorResponse
 
-trait ErrorResponseDirectives extends JsonSerializers {
+case class ErrorResponseData(statusCode: StatusCode, message: String)
+
+trait ErrorFormat extends JsonSerializers with SprayJsonSupport {
 
   def completeWithError(documentationUrl: String)
                        (errorResponseData: ErrorResponseData): StandardRoute = {
@@ -19,10 +21,4 @@ trait ErrorResponseDirectives extends JsonSerializers {
 
     complete(errorResponseData.statusCode, errorResponse)
   }
-
 }
-
-object ErrorResponseDirectives {
-  case class ErrorResponseData(statusCode: StatusCode, message: String)
-}
-

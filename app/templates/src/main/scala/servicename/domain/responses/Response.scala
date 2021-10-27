@@ -1,4 +1,4 @@
-package <%= packageName %>.domain.response
+package <%= packageName %>.domain.responses
 
 case class Response[T](
   total: Int,

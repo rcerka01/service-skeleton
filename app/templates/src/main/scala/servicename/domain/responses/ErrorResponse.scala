@@ -1,31 +1,30 @@
-package <%= packageName %>.domain.response
+package <%= packageName %>.domain.responses
+
+import org.joda.time.LocalDateTime
 
 import java.util.UUID
-import org.joda.time.{DateTime, DateTimeZone}
 
-case class ErrorResponse(errors: Seq[ErrorItem])
+case class ErrorResponse(error: ErrorItem)
 
 case class ErrorItem(
   id: String,
   href: String,
   status: Int,
   message: String,
-  replied_at: DateTime)
+  replied_at: LocalDateTime)
 
 object ErrorResponse {
   private def hash = UUID.randomUUID.toString
 
-  def apply(documentationUrl: String, httpStatus: Int, message: String): ErrorResponse = {
+  def apply(documentationUrl: String, httpStatus: Int, message: String): ErrorResponse =
     ErrorResponse(
-      errors = Seq(
+      error =
         ErrorItem(
           id = hash,
           href = documentationUrl,
           status = httpStatus,
           message = message,
-          replied_at = DateTime.now(DateTimeZone.UTC)
+          replied_at = new LocalDateTime()
         )
       )
-    )
-  }
 }

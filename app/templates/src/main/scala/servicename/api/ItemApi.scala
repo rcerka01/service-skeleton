@@ -1,20 +1,22 @@
 package <%= packageName %>.api
 
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.server.Directives._
-import <%= packageName %>.api.directives.CustomDirectives
+import akka.http.scaladsl.server.Route
+import <%= packageName %>.api.directives.EnabledDirectives
 import <%= packageName %>.config.Config
 import <%= packageName %>.datasource.ItemDataSource
 import <%= packageName %>.domain.marshalling.JsonSerializers
-import org.slf4s.Logging
+import <%= packageName %>.<%= capitalisedName %>Context._
 
 trait ItemApi extends JsonSerializers
-  with CustomDirectives
+  with EnabledDirectives
   with Config
-  with Logging {
+  with SprayJsonSupport {
 
   def itemDataSource: ItemDataSource
 
-  val itemRoutes = {
+  val itemRoutes: Route = {
     path("items") {
       get {
         respondWithCacheHeaders {
@@ -22,22 +24,18 @@ trait ItemApi extends JsonSerializers
             sort { itemSort =>
               complete {
                 log.info("/items")
-                toResponse(pagination) {
-                  itemDataSource.getMultipleItems(pagination.limit, pagination.offset)
-                }
+                toResponse(pagination)(itemDataSource.getMultipleItems(pagination.limit, pagination.offset))
               }
             }
           }
         }
       }
-    } ~ path("items" / IntNumber) { id =>
+    } ~ path("item" / IntNumber) { id =>
       get {
         respondWithCacheHeaders {
           complete {
-            log.info(s"/items/$id")
-            toResponse() {
-              itemDataSource.getSingleItem(id)
-            }
+            log.info(s"/item/$id")
+            toResponse()(itemDataSource.getSingleItem(id))
           }
         }
       }

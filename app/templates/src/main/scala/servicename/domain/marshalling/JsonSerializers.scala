@@ -1,18 +1,32 @@
 package <%= packageName %>.domain.marshalling
 
-import java.text.SimpleDateFormat
-import de.heikoseeberger.akkahttpjson4s.Json4sSupport
-import org.json4s.prefs.EmptyValueStrategy
-import org.json4s.{DefaultFormats, jackson}
+import <%= packageName %>.domain.Item
+import <%= packageName %>.domain.responses.{ErrorItem, ErrorResponse, Response, Status}
+import org.joda.time.LocalDateTime
+import spray.json._
 
-trait JsonSerializers extends Json4sSupport {
-  private val defaultJsonFormat = new DefaultFormats {
-    override val emptyValueStrategy = EmptyValueStrategy.preserve
+import scala.util.{Failure, Success, Try}
 
-    private val ISO8601 = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-    override def dateFormatter = new SimpleDateFormat(ISO8601)
-  }
+trait JsonSerializers extends DefaultJsonProtocol {
+  // JODA LocalDateTime
+  implicit val jodaLocalDateTimeFormat: JsonFormat[LocalDateTime] =
+    new JsonFormat[LocalDateTime] {
+      override def write(obj: LocalDateTime): JsValue = JsString(obj.toString)
+      override def read(json: JsValue): LocalDateTime = json match {
+        case JsString(s) => Try(LocalDateTime.parse(s)) match {
+          case Success(result) => result
+          case Failure(exception) =>
+            deserializationError(s"Serialization error. Could not parse $s as date::time $exception")
+        }
+        case notAJsString =>
+          deserializationError(s"Serialization error. Could not parse value: $notAJsString")
+      }
+    }
 
-  implicit val serialization = jackson.Serialization
-  implicit val formats = defaultJsonFormat ++ org.json4s.ext.JodaTimeSerializers.all
+  implicit val itemJson: RootJsonFormat[Item] = jsonFormat1(Item)
+  implicit val statusJson: RootJsonFormat[Status] = jsonFormat1(Status)
+  implicit val responseJson: RootJsonFormat[Response[Item]] = jsonFormat4(Response[Item])
+
+  implicit val errorItemResponseJson: RootJsonFormat[ErrorItem] = jsonFormat5(ErrorItem)
+  implicit val errorResponseJson: RootJsonFormat[ErrorResponse] = jsonFormat1(ErrorResponse.apply) // Class with Companion object
 }

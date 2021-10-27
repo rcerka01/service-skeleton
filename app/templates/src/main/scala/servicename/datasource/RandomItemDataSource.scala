@@ -1,14 +1,15 @@
 package <%= packageName %>.datasource
 
-import <%= packageName %>.api.directives.ResponseDirectives.{MultiEntityResponseData,SingleEntityResponseData}
 import <%= packageName %>.domain.Item
+import <%= packageName %>.domain.responses.ResponseWrapper.{MultiEntityResponseData, SingleEntityResponseData}
 
 import scala.concurrent.Future
 import scala.util.Random
 
 class RandomItemDataSource extends ItemDataSource {
-  private def randomItem = Item(Random.nextString(length = 4))
-  private val itemRepository: Seq[Item] = Stream.continually(randomItem)
+  val LENGTH = 4
+  private def randomItem = Item(Random.nextString(length = LENGTH))
+  private val itemRepository: Seq[Item] = LazyList.continually(randomItem)
 
   override def getSingleItem(id: Int): Future[SingleEntityResponseData[Item]] = {
     Future.successful(SingleEntityResponseData(itemRepository.headOption, 1))

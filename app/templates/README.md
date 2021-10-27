@@ -1,10 +1,8 @@
 # <%= serviceName %>
 
-One Paragraph of project description goes here
-
 ### Prerequisites
 
-* [OpenJDK 8](https://openjdk.java.net/install/) 
+* [OpenJDK 8](https://openjdk.java.net/install/)
 * [sbt](https://www.scala-sbt.org/1.x/docs/Setup.html)
 
 ### Start
@@ -13,25 +11,21 @@ One Paragraph of project description goes here
 sbt run
 ```
 
-Service will be available here: [http://localhost:8080/status](http://localhost:8080/status)
+Service up-running flag will be available here: [http://localhost:8080/status](http://localhost:8080/status)
 
 ## Running the tests
 
 ```
-sbt test # Unit tests
-sbt it:test # Integration tests
-sbt test-all # Run all
-```
+# Unit tests
+sbt test 
 
-To validate coverage run
-```
-sbt clean coverage test
-sbt clean coverage it:test
+# Integration tests
+sbt it:test 
 ```
 
 To generate the coverage reports run
 ```
-sbt coverageReport
+sbt clean test it:test coverageReport
 ```
 
 ### Coding style
@@ -43,4 +37,3 @@ Configuration in [build.sbt](build.sbt)
 
 * [sbt](https://www.scala-sbt.org/) - build tool
 * [akka-http](https://doc.akka.io/docs/akka-http/current/) - Web Framework
-* [Json4s](http://json4s.org/) - Json parsing and generation

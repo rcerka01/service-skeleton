@@ -1,25 +1,19 @@
 package <%= packageName %>
 
-import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
 import akka.http.scaladsl.Http
 import <%= packageName %>.api.Api
 import <%= packageName %>.config.Config
-import org.slf4s.Logging
-import scala.concurrent.ExecutionContextExecutor
+import <%= capitalisedName %>Context._
+
+import scala.concurrent.ExecutionContext
 
 object <%= capitalisedName %>Service extends App
   with Api
-  with Config
-  with Logging {
+  with Config {
 
-  implicit val system: ActorSystem = <%= capitalisedName %>Context.system
-  implicit val materializer: ActorMaterializer = <%= capitalisedName %>Context.materializer
+  implicit def executor: ExecutionContext = system.dispatchers.lookup("<%= serviceName %>-dispatcher")
 
-  implicit def executor: ExecutionContextExecutor = system.dispatcher
-
-
-  Http().bindAndHandle(routes, httpInterface, httpPort)
+  Http().newServerAt(httpInterface, httpPort).bind(routes)
 
   log.info(s"Starting $serviceName on $httpInterface:$httpPort")
 }

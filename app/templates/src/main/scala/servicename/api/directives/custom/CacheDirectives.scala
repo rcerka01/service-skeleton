@@ -1,7 +1,8 @@
-package <%= packageName %>.api.directives
+package <%= packageName %>.api.directives.custom
 
 import akka.http.scaladsl.model.HttpHeader
 import akka.http.scaladsl.model.headers.RawHeader
+import akka.http.scaladsl.server.Directive0
 import akka.http.scaladsl.server.Directives.respondWithHeader
 
 trait CacheDirectives {
@@ -19,6 +20,6 @@ trait CacheDirectives {
     "no-cache, no-store, must-revalidate"
   )
 
-  val respondWithCacheHeaders = respondWithHeader(defaultCacheHeader)
-  val respondWithNoCacheHeaders = respondWithHeader(defaultNoCacheHeader)
+  val respondWithCacheHeaders: Directive0 = respondWithHeader(defaultCacheHeader)
+  val respondWithNoCacheHeaders: Directive0 = respondWithHeader(defaultNoCacheHeader)
 }

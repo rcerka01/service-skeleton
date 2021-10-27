@@ -1,7 +1,8 @@
 package <%= packageName %>.datasource
 
-import <%= packageName %>.api.directives.ResponseDirectives.{MultiEntityResponseData,SingleEntityResponseData}
 import <%= packageName %>.domain.Item
+import <%= packageName %>.domain.responses.ResponseWrapper.{MultiEntityResponseData, SingleEntityResponseData}
+
 import scala.concurrent.Future
 
 trait ItemDataSource {

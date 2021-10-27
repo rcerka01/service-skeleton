@@ -1,44 +1,46 @@
 package <%= packageName %>.api.validation
 
-import org.specs2.mutable.Specification
-import org.specs2.specification.Scope
-import scala.util.Random
+import <%= packageName %>.api.directives.custom.PaginateDirectives
+import org.scalatest.wordspec.AnyWordSpec
 
-class PaginationValidatorSpec extends Specification {
+class PaginationValidatorSpec extends AnyWordSpec with PaginateDirectives {
+  val maxPageLimit = 10
   "The isInvalidPageLimit method" should {
-    "return true for a page size of -1" in new PaginationValidatorScope {
-      validator.isInvalidPageLimit(maximum)(-1) must beTrue
+    "return true for a page size of -1" in {
+      val invalidPageLimit = isInvalidPageLimit(maxPageLimit)(-1)
+      assert(invalidPageLimit)
     }
 
-    "return false for page size of 0" in new PaginationValidatorScope {
-      validator.isInvalidPageLimit(maximum)(0) must beFalse
+    "return false for page size of 0" in {
+      val invalidPageLimit = isInvalidPageLimit(maxPageLimit)(0)
+      assert(!invalidPageLimit)
     }
 
-    "return false page size of the maximum" in new PaginationValidatorScope {
-      validator.isInvalidPageLimit(maximum)(maximum) must beFalse
+    "return false page size of the maximum" in {
+      val invalidPageLimit = isInvalidPageLimit(maxPageLimit)(maxPageLimit)
+      assert(!invalidPageLimit)
     }
 
-    "return true a page size of more than the maximum" in new PaginationValidatorScope {
-      validator.isInvalidPageLimit(maximum)(maximum + 1) must beTrue
+    "return true a page size of more than the maximum" in {
+      val invalidPageLimit = isInvalidPageLimit(maxPageLimit)(maxPageLimit + 1)
+      assert(invalidPageLimit)
     }
   }
 
   "The isInvalidOffset method" should {
-    "return true for offsets less than 0" in new PaginationValidatorScope {
-      validator.isInvalidOffset(-1) must beTrue
+    "return true for offsets less than 0" in {
+      val invalidPageOffset = isInvalidOffset(-1)
+      assert(invalidPageOffset)
     }
 
-    "return false for an offset of 0" in new PaginationValidatorScope {
-      validator.isInvalidOffset(0) must beFalse
+    "return false for an offset of 0" in {
+      val invalidPageOffset = isInvalidOffset(0)
+      assert(!invalidPageOffset)
     }
 
-    "return false for any positive integer" in new PaginationValidatorScope {
-      Seq(1, 7, 3000, Integer.MAX_VALUE).exists(validator.isInvalidOffset) must beFalse
+    "return false for any positive integer" in  {
+      val invalidPageOffset = Seq(1, 7, 3000, Integer.MAX_VALUE).exists(isInvalidOffset)
+      assert(!invalidPageOffset)
     }
   }
-}
-
-trait PaginationValidatorScope extends Scope {
-  val maximum = 9
-  val validator = new PaginationValidator
 }
